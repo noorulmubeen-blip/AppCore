@@ -5,23 +5,23 @@
 //  Created by Noor ul Mubeen on 22/09/2025.
 //
 public enum NetworkResponse<T>{
-    case success(T)
+    case success(data: T)
     case error(message: String, code:Int? = nil, data : T? = nil)
     case exception(Error)
 }
 
 
-extension NetworkResponse {
-    func toDomainResponse() -> DomainResponse<T> {
+public extension NetworkResponse {
+    public func toDomainResponse() -> DomainResponse<T> {
         switch self {
         case .success(let data):
-            return .success(data)
+            return .Success(data : data)
             
         case .error(let message, _, let data):
-            return .error(data: data, message: message)
+            return .Error(data: data, message: message)
             
         case .exception(let error):
-            return .error(data: nil, message: error.localizedDescription)
+            return .Error(data: nil, message: error.localizedDescription)
         }
     }
 }

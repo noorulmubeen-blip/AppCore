@@ -15,11 +15,15 @@ let package = Package(
             name: "AppCore",
             targets: ["AppCore"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/Swinject/Swinject.git", from: "2.10.0")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "AppCore",
+            dependencies:  [.product(name: "Swinject", package: "Swinject")],
             path: "Sources"),
         .testTarget(
             name: "AppCoreTests",

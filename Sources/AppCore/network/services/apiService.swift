@@ -6,7 +6,7 @@
 //
 import Foundation
 
-protocol APIClient {
+public protocol APIClient {
     func request<T: Decodable>(_ endpoint: URLRequest) async throws -> T
     func getRequest<T: Decodable>(_ endpoint: URLRequest) async throws -> T
     func postRequest<T: Decodable>(_ endpoint: URLRequest) async throws -> T

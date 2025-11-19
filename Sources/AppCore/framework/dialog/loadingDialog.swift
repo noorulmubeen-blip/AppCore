@@ -37,6 +37,7 @@ public struct LoadingContainer<T, Content: View, LoadingView: View>: View {
         VStack(spacing: 20) {
             content
         }
+        .frame(maxWidth: .infinity)
         .fullScreenCover(isPresented: .constant(uiState.isLoading)) {
             if(loadingContent == nil){
                 LoadingDialog(loadingContent : {ProgressView()}())

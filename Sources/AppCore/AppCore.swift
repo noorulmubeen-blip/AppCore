@@ -2,32 +2,43 @@
 // https://docs.swift.org/swift-book
 import Swinject
 
-public class AppCoreAssembly: Assembly {
+public final class AppCoreAssembly: Assembly {
     public init() {}
-    
+
     public func assemble(container: Container) {
+
+        // MARK: - Local Storage
         container.register(PreferenceStorage.self) { _ in
             PreferenceStorageImpl()
         }
-        container.register(GetAccessTokenUseCase.self) { resolver in
-            let preferenceStorage = resolver.resolve(PreferenceStorage.self)!
-            return GetAccessTokenUseCase(preference : preferenceStorage)
+        .inObjectScope(.container)
+
+        // MARK: - Use Cases
+        container.register(GetAccessTokenUseCase.self) { r in
+            GetAccessTokenUseCase(preference: r.resolve(PreferenceStorage.self)!)
         }
-        container.register(SetAccessTokenUseCase.self) { resolver in
-            let preferenceStorage = resolver.resolve(PreferenceStorage.self)!
-            return SetAccessTokenUseCase(preference : preferenceStorage)
+
+        container.register(SetAccessTokenUseCase.self) { r in
+            SetAccessTokenUseCase(preference: r.resolve(PreferenceStorage.self)!)
         }
-        container.register(AuthInterceptor.self) { resolver in
-            let preferenceStorage = resolver.resolve(PreferenceStorage.self)!
-            return AuthInterceptor(preference: preferenceStorage)
+
+        // MARK: - Interceptors
+        container.register(AuthInterceptor.self) { r in
+            AuthInterceptor(preference: r.resolve(PreferenceStorage.self)!)
         }
+        .inObjectScope(.transient)
+
         container.register(LogInterceptor.self) { _ in
-            return LogInterceptor()
+            LogInterceptor()
         }
-        container.register(APIClient.self) { resolver in
-            let authInterceptor = resolver.resolve(AuthInterceptor.self)!
-            let logInterceptor = resolver.resolve(LogInterceptor.self)!
-            return DefaultAPIClient(interceptors: [authInterceptor, logInterceptor])
+        .inObjectScope(.transient)
+
+        // MARK: - API Client
+        container.register(APIClient.self) { r in
+            let auth = r.resolve(AuthInterceptor.self)!
+            let log  = r.resolve(LogInterceptor.self)!
+            return DefaultAPIClient(interceptors: [auth, log])
         }
+        .inObjectScope(.container)
     }
 }

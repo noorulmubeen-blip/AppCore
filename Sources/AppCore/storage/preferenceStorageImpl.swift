@@ -47,6 +47,10 @@ class PreferenceStorageImpl: PreferenceStorage {
         self.defaults.removeObject(forKey: ACCESS_TOKEN_KEY)
     }
     
+    func removeRefreshToken(){
+        self.defaults.removeObject(forKey: REFRESH_TOKEN_KEY)
+    }
+    
     func getRefreshToken() -> String? {
         if let value = defaults.string(forKey: REFRESH_TOKEN_KEY) as? String {
             return value

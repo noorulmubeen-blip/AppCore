@@ -57,7 +57,12 @@ final class DefaultAPIClient: APIClient {
             throw URLError(.badServerResponse)
         }
         guard (200..<300).contains(httpResponse.statusCode) else {
-            throw URLError(.badServerResponse)
+            // Attempt to decode the error JSON from server
+            if let apiError = try? JSONDecoder().decode(APIErrorResponse.self, from: data) {
+                throw APIClientError.server(message: apiError.message, status: httpResponse.statusCode)
+            } else {
+                throw APIClientError.unknown
+            }
         }
         
         // Decode
