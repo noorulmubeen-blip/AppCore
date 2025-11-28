@@ -13,12 +13,6 @@ public enum UiState<T> {
 }
 
 public extension UiState {
-    var isLoading: Bool {
-        if case .uiLoading = self {
-            return true
-        }
-        return false
-    }
     var data: T? {
         switch self {
         case .uiIdle(let data),
@@ -26,7 +20,21 @@ public extension UiState {
                 .uiError(_, _, _, let data):
             return data
         case .uiSuccess(let data):
-            return data 
+            return data
         }
+    }
+    var isLoading: Bool {
+        if case .uiLoading = self { return true }
+        return false
+    }
+    
+    var isError: Bool {
+        if case .uiError = self { return true }
+        return false
+    }
+    
+    var errorMessage: String {
+        if case .uiError(let message, _, _, _) = self { return message }
+        return ""
     }
 }
