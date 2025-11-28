@@ -54,7 +54,7 @@ public struct FullScreenDialog<ContentView: View>: View {
     
     public var body: some View {
         ZStack {
-            Color.black.opacity(0.4).ignoresSafeArea()
+            Color.white.opacity(0.05).ignoresSafeArea()
             
             VStack(spacing: 20) {
                 dialogContent

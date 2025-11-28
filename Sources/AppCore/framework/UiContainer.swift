@@ -96,16 +96,16 @@ public struct UiContainer<
             }
         }
         .fullScreenCover(item: $activeError) { errorData in
-            // errorData is guaranteed to contain the message here
-            if let customError = errorContent {
-                ErrorDialog(errorContent: customError) // You may need to pass the message to customError
-            } else {
-                DefaultErrorDialog(
-                    // Use the message GUARANTEED to be here
-                    message: errorData.message,
-                    onDismiss: { activeError = nil }
-                )
+                // errorData is guaranteed to contain the message here
+                if let customError = errorContent {
+                     ErrorDialog(errorContent: customError) // You may need to pass the message to customError
+                } else {
+                     DefaultErrorDialog(
+                         // Use the message GUARANTEED to be here
+                         message: errorData.message,
+                         onDismiss: { activeError = nil }
+                     )
+                }
             }
-        }
     }
 }

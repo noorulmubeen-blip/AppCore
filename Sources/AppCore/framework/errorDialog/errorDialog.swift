@@ -54,9 +54,11 @@ public struct ErrorContainer<T, Content: View, ErrorView: View>: View {
             if let providedErrorView = errorContent {
                 ErrorDialog(errorContent: providedErrorView)
             } else {
-                DefaultErrorDialog(
-                    message: errorMessage,
-                    onDismiss: { showError = false }
+                FullScreenDialog(dialogContent:
+                                    DefaultErrorDialog(
+                                        message: errorMessage,
+                                        onDismiss: { showError = false }
+                                    )
                 )
             }
         }
@@ -89,7 +91,7 @@ public struct DefaultErrorDialog: View {
     
     public var body: some View {
         ZStack {
-            Color.black.opacity(0.4).ignoresSafeArea()
+            Color.black.opacity(0.05).ignoresSafeArea()
             
             VStack(spacing: 16) {
                 Text("Error")
